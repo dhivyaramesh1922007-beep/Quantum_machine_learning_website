@@ -1,0 +1,2914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumML — Learn Quantum Computing &amp; Quantum Machine Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --void: #ffffff;
+            --panel: #f4f6fb;
+            --panel-2: #eaeef8;
+            --line: #dde3f0;
+            --q0: #2563eb;
+            --q1: #7c3aed;
+            --xp: #b45309;
+            --ok: #15803d;
+            --err: #dc2626;
+            --ink: #161b2e;
+            --ink-dim: #5b6178;
+            --ink-faint: #8b92ab;
+            --on-accent: #ffffff;
+            --sans: 'Space Grotesk', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+            --rail-w: 280px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            background: var(--void);
+            color: var(--ink);
+            font-family: var(--sans);
+            line-height: 1.5;
+            overflow-x: hidden
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+                scroll-behavior: auto !important
+            }
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        button {
+            font-family: var(--sans);
+            cursor: pointer
+        }
+
+        ::selection {
+            background: var(--q1);
+            color: var(--void)
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--q0);
+            outline-offset: 2px
+        }
+
+        .mono {
+            font-family: var(--mono)
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--void)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--line);
+            border-radius: 6px
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--ink-faint)
+        }
+
+        /* login */
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--void)
+        }
+
+        #loginCanvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%
+        }
+
+        .login-card {
+            position: relative;
+            z-index: 2;
+            width: min(420px, 92vw);
+            background: rgba(255, 255, 255, .9);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 40px 36px 32px;
+            box-shadow: 0 30px 70px rgba(30, 41, 80, .16)
+        }
+
+        .login-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px
+        }
+
+        .login-brand-mark {
+            width: 38px;
+            height: 38px;
+            flex: none
+        }
+
+        .login-brand-mark svg {
+            width: 100%;
+            height: 100%
+        }
+
+        .login-brand-text {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: .01em
+        }
+
+        .login-brand-text span {
+            color: var(--q0)
+        }
+
+        .login-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .login-tab {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--ink-dim);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 0;
+            border-bottom: 2px solid transparent;
+            transition: color .15s
+        }
+
+        .login-tab.active {
+            color: var(--ink);
+            border-bottom-color: var(--q0)
+        }
+
+        .field {
+            margin-bottom: 16px
+        }
+
+        .field label {
+            display: block;
+            font-size: 12px;
+            color: var(--ink-dim);
+            margin-bottom: 6px;
+            font-weight: 500
+        }
+
+        .field input {
+            width: 100%;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            padding: 11px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: var(--sans);
+            transition: border-color .15s
+        }
+
+        .field input:focus {
+            border-color: var(--q0)
+        }
+
+        .form-error {
+            color: var(--err);
+            font-size: 13px;
+            margin: 2px 0 14px;
+            min-height: 16px
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 20px;
+            transition: transform .1s, background .15s, opacity .15s
+        }
+
+        .btn:active {
+            transform: scale(.98)
+        }
+
+        .btn-primary {
+            background: var(--q0);
+            color: var(--on-accent);
+            width: 100%
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--ink-dim);
+            border: 1px solid var(--line)
+        }
+
+        .btn-ghost:hover {
+            color: var(--ink);
+            border-color: var(--ink-faint)
+        }
+
+        .login-guest {
+            margin-top: 14px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--ink-faint)
+        }
+
+        .login-guest button {
+            background: none;
+            border: none;
+            color: var(--q1);
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .login-hint {
+            font-size: 11px;
+            color: var(--ink-faint);
+            margin-top: 18px;
+            text-align: center;
+            line-height: 1.5
+        }
+
+        /* app shell */
+        #app {
+            display: flex;
+            min-height: 100vh
+        }
+
+        #rail {
+            width: var(--rail-w);
+            flex: none;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            background: var(--panel);
+            border-right: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            z-index: 50
+        }
+
+        .rail-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .rail-brand-mark {
+            width: 26px;
+            height: 26px;
+            flex: none
+        }
+
+        .rail-brand-mark svg {
+            width: 100%;
+            height: 100%
+        }
+
+        .rail-brand-text {
+            font-weight: 700;
+            font-size: 15px
+        }
+
+        .rail-brand-text span {
+            color: var(--q0)
+        }
+
+        .rail-close {
+            margin-left: auto;
+            display: none;
+            background: none;
+            border: none;
+            color: var(--ink-dim);
+            font-size: 20px
+        }
+
+        .student-card {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .student-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px
+        }
+
+        .student-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            flex: none;
+            background: linear-gradient(135deg, var(--q0), var(--q1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--void)
+        }
+
+        .student-id {
+            min-width: 0
+        }
+
+        .student-name {
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .student-email {
+            font-size: 11px;
+            color: var(--ink-faint);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px
+        }
+
+        .stat-chip {
+            flex: 1;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 8px 6px;
+            text-align: center
+        }
+
+        .stat-chip .v {
+            font-family: var(--mono);
+            font-size: 14px;
+            font-weight: 600
+        }
+
+        .stat-chip .l {
+            font-size: 9px;
+            color: var(--ink-faint);
+            margin-top: 2px;
+            letter-spacing: .03em
+        }
+
+        .stat-chip.xp .v {
+            color: var(--xp)
+        }
+
+        .stat-chip.streak .v {
+            color: #FF9B6A
+        }
+
+        .stat-chip.rank .v {
+            color: var(--q1);
+            font-size: 11px
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--ink-dim);
+            margin-bottom: 6px
+        }
+
+        .progress-track {
+            height: 6px;
+            background: var(--panel-2);
+            border-radius: 3px;
+            overflow: hidden
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--q0), var(--q1));
+            border-radius: 3px;
+            transition: width .5s ease
+        }
+
+        .rail-nav {
+            padding: 14px 12px;
+            flex: 1
+        }
+
+        .rail-section-label {
+            font-size: 10px;
+            letter-spacing: .08em;
+            color: var(--ink-faint);
+            padding: 10px 10px 6px;
+            font-weight: 600
+        }
+
+        .rail-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            color: var(--ink-dim);
+            font-size: 13px;
+            padding: 9px 10px;
+            border-radius: 6px;
+            margin-bottom: 2px;
+            position: relative
+        }
+
+        .rail-link:hover {
+            background: var(--panel-2);
+            color: var(--ink)
+        }
+
+        .rail-link.active {
+            background: var(--panel-2);
+            color: var(--ink)
+        }
+
+        .rail-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            bottom: 6px;
+            width: 2px;
+            background: var(--q0);
+            border-radius: 2px
+        }
+
+        .rail-link .ico {
+            width: 16px;
+            text-align: center;
+            flex: none;
+            font-size: 14px
+        }
+
+        .rail-link .check {
+            margin-left: auto;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            border: 1.5px solid var(--line);
+            flex: none;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent
+        }
+
+        .rail-link.done .check {
+            background: var(--ok);
+            border-color: var(--ok);
+            color: var(--void)
+        }
+
+        .rail-footer {
+            padding: 14px 20px;
+            border-top: 1px solid var(--line)
+        }
+
+        .logout-btn {
+            width: 100%;
+            background: none;
+            border: 1px solid var(--line);
+            color: var(--ink-dim);
+            padding: 9px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px
+        }
+
+        .logout-btn:hover {
+            border-color: var(--err);
+            color: var(--err)
+        }
+
+        #railScrim {
+            position: fixed;
+            inset: 0;
+            background: rgba(22, 27, 46, .35);
+            z-index: 40;
+            display: none
+        }
+
+        #main {
+            flex: 1;
+            min-width: 0
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 32px;
+            background: rgba(255, 255, 255, .85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line)
+        }
+
+        .rail-toggle {
+            display: none;
+            background: none;
+            border: 1px solid var(--line);
+            color: var(--ink);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            font-size: 16px
+        }
+
+        .topbar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ink-dim)
+        }
+
+        .topbar-title b {
+            color: var(--ink)
+        }
+
+        .topbar-spacer {
+            flex: 1
+        }
+
+        .topbar-xp {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--xp);
+            background: var(--panel);
+            border: 1px solid var(--line);
+            padding: 6px 12px;
+            border-radius: 20px
+        }
+
+        /* hero */
+        .hero {
+            position: relative;
+            padding: 64px 32px 56px;
+            overflow: hidden;
+            border-bottom: 1px solid var(--line)
+        }
+
+        #heroParticles {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            opacity: .5
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 40px;
+            align-items: center;
+            max-width: 1180px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2
+        }
+
+        .hero-eyebrow {
+            font-size: 20px;
+            color: var(--q0);
+            font-family: var(--mono);
+            margin-bottom: 16px
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 4vw, 46px);
+            line-height: 1.08;
+            font-weight: 700;
+            letter-spacing: -.01em;
+            margin-bottom: 18px
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--q1)
+        }
+
+        .hero p {
+            color: var(--ink-dim);
+            font-size: 16px;
+            max-width: 46ch;
+            margin-bottom: 26px
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .btn-hero {
+            padding: 13px 24px
+        }
+
+        .quantum-core-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            max-width: 380px;
+            margin: 0 auto
+        }
+
+        .core-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px solid var(--line)
+        }
+
+        .core-ring.r1 {
+            inset: 6%;
+            border-color: rgba(1, 0, 5, 0.35);
+            animation: spin 18s linear infinite
+        }
+
+        .core-ring.r2 {
+            inset: 16%;
+            border-color: rgba(9, 8, 10, 0.35);
+            animation: spin 26s linear infinite reverse
+        }
+
+        .core-ring.r3 {
+            inset: 26%;
+            border-color: rgba(10, 7, 0, 0.25);
+            animation: spin 34s linear infinite
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .core-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 34%;
+            height: 34%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #BFEEFF, var(--q0) 40%, var(--q1) 100%);
+            box-shadow: 0 0 60px rgba(79, 209, 255, .5), 0 0 120px rgba(176, 132, 245, .25);
+            animation: pulse 4s ease-in-out infinite
+        }
+
+        .quantum-scene {
+            height: 600px;
+
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantum-core {
+            width: 180px;
+            height: 180px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(circle,
+                    #a5f5ff,
+                    #63eaff 15%,
+                    #755dff 40%,
+                    transparent 70%);
+
+            box-shadow:
+                0 0 40px #63eaff,
+                0 0 100px #755dff,
+                0 0 180px rgba(117, 93, 255, .45);
+
+            animation:
+                corePulse 3s infinite ease-in-out,
+                coreRotate 10s linear infinite;
+
+            position: absolute;
+            z-index: 5;
+        }
+
+        @keyframes corePulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.12);
+            }
+        }
+
+        @keyframes coreRotate {
+
+            to {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        .orbit {
+            position: absolute;
+
+            border: 1px solid rgba(0, 6, 7, 0.45);
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 20px rgba(0, 15, 17, 0.15);
+
+            animation: orbitRotate linear infinite;
+        }
+
+        .orbit1 {
+            width: 310px;
+            height: 150px;
+            transform: rotate(25deg);
+            animation-duration: 7s;
+        }
+
+        .orbit2 {
+            width: 380px;
+            height: 190px;
+            transform: rotate(-40deg);
+            animation-duration: 10s;
+        }
+
+        .orbit3 {
+            width: 450px;
+            height: 220px;
+            transform: rotate(65deg);
+            animation-duration: 13s;
+        }
+
+        @keyframes orbitRotate {
+
+            from {
+                transform: rotate(0deg) rotateX(60deg);
+            }
+
+            to {
+                transform: rotate(360deg) rotateX(60deg);
+            }
+        }
+
+        .particle {
+            position: absolute;
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: rgb(22, 15, 116);
+
+            box-shadow:
+                0 0 12px dark blue,
+                0 0 30px rgb(15, 13, 88);
+
+            animation:
+                floatParticle 5s infinite ease-in-out;
+        }
+
+        .p1 {
+            left: 15%;
+            top: 15%
+        }
+
+        .p2 {
+            left: 80%;
+            top: 20%;
+            animation-delay: 1s
+        }
+
+        .p3 {
+            left: 20%;
+            top: 75%;
+            animation-delay: 2s
+        }
+
+        .p4 {
+            left: 85%;
+            top: 70%;
+            animation-delay: 3s
+        }
+
+        .p5 {
+            left: 50%;
+            top: 8%;
+            animation-delay: 1.5s
+        }
+
+        .p6 {
+            left: 8%;
+            top: 48%;
+            animation-delay: 2.5s
+        }
+
+        .p7 {
+            left: 90%;
+            top: 48%;
+            animation-delay: 3.5s
+        }
+
+        @keyframes floatParticle {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: .5;
+            }
+
+            50% {
+                transform: translateY(-30px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1)
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.06)
+            }
+        }
+
+        .core-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--q0);
+            box-shadow: 0 0 8px var(--q0)
+        }
+
+        .core-particle.p2 {
+            background: var(--q1);
+            box-shadow: 0 0 8px var(--q1)
+        }
+
+        .core-particle.p3 {
+            background: var(--xp);
+            box-shadow: 0 0 8px var(--xp)
+        }
+
+        /* sections */
+        .section {
+            padding: 56px 32px;
+            max-width: 1180px;
+            margin: 0 auto;
+            scroll-margin-top: 70px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .section-head {
+            margin-bottom: 32px;
+            max-width: 60ch
+        }
+
+        .section-kicker {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--q0);
+            margin-bottom: 10px
+        }
+
+        .section-head h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px
+        }
+
+        .section-head p {
+            color: var(--ink-dim);
+            font-size: 14.5px
+        }
+
+        .mark-complete {
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .mark-complete:hover {
+            border-color: var(--ok)
+        }
+
+        .mark-complete.done {
+            color: var(--ok);
+            border-color: var(--ok)
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 14px
+        }
+
+        .info-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 20px
+        }
+
+        .info-card h3 {
+            font-size: 15px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .info-card p {
+            font-size: 13px;
+            color: var(--ink-dim);
+            line-height: 1.6
+        }
+
+        .info-card .tag {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--void);
+            background: var(--q0);
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-weight: 700
+        }
+
+        .gate-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 18px;
+            position: relative
+        }
+
+        .gate-symbol {
+            width: 42px;
+            height: 42px;
+            border: 1.5px solid var(--q0);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--q0);
+            margin-bottom: 12px
+        }
+
+        .gate-card h3 {
+            font-size: 14px;
+            margin-bottom: 6px
+        }
+
+        .gate-card p {
+            font-size: 12.5px;
+            color: var(--ink-dim);
+            margin-bottom: 10px
+        }
+
+        .gate-matrix {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--ink-faint);
+            background: var(--panel-2);
+            padding: 8px 10px;
+            border-radius: 6px;
+
+        }
+
+        /* simulator */
+        .sim-wrap {
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+            gap: 20px
+        }
+
+        @media(max-width:860px) {
+            .sim-wrap {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .sim-panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 20px
+        }
+
+        .sim-panel h3 {
+            font-size: 13px;
+            color: var(--ink-dim);
+            margin-bottom: 14px;
+            font-weight: 600;
+            letter-spacing: .02em
+        }
+
+        .gate-picker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px
+        }
+
+        .gate-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            background: var(--panel-2);
+            color: var(--ink);
+            font-family: var(--mono);
+            font-weight: 700;
+            font-size: 14px
+        }
+
+        .gate-btn:hover {
+            border-color: var(--q0);
+            color: var(--q0)
+        }
+
+        .gate-btn.cnot {
+            width: auto;
+            padding: 0 12px;
+            font-size: 11px
+        }
+
+        .qubit-select {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-size: 12.5px;
+            color: var(--ink-dim)
+        }
+
+        .qubit-select select {
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            font-family: var(--mono);
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 12.5px
+        }
+
+        .ry-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px
+        }
+
+        .ry-row input[type=range] {
+            flex: 1;
+            accent-color: var(--q1)
+        }
+
+        .ry-row .ry-val {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--q1);
+            width: 46px;
+            text-align: right
+        }
+
+        .circuit-track {
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 14px;
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px
+        }
+
+        .circuit-empty {
+            font-size: 12px;
+            color: var(--ink-faint);
+            font-style: italic
+        }
+
+        .circuit-op {
+            background: var(--void);
+            border: 1px solid var(--q0);
+            color: var(--q0);
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 6px 9px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .circuit-op button {
+            background: none;
+            border: none;
+            color: var(--ink-faint);
+            font-size: 12px
+        }
+
+        .circuit-op button:hover {
+            color: var(--err)
+        }
+
+        .sim-actions {
+            display: flex;
+            gap: 10px
+        }
+
+        .btn-run {
+            background: var(--q0);
+            color: var(--on-accent);
+            flex: 1
+        }
+
+        .btn-run:hover {
+            background: #1d4ed8
+        }
+
+        .btn-reset {
+            background: none;
+            border: 1px solid var(--line);
+            color: var(--ink-dim)
+        }
+
+        .btn-reset:hover {
+            border-color: var(--err);
+            color: var(--err)
+        }
+
+        .state-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px
+        }
+
+        .state-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .state-ket {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--ink-dim);
+            width: 52px;
+            flex: none
+        }
+
+        .state-bar-track {
+            flex: 1;
+            height: 20px;
+            background: var(--panel-2);
+            border-radius: 6px;
+            overflow: hidden
+        }
+
+        .state-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--q0), var(--q1));
+            width: 0%;
+            transition: width .4s ease
+        }
+
+        .state-pct {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--ink-dim);
+            width: 48px;
+            text-align: right;
+            flex: none
+        }
+
+        .amp-list {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--ink-faint);
+            line-height: 2
+        }
+
+        /* bloch sphere */
+        .bloch-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: center
+        }
+
+        @media(max-width:860px) {
+            .bloch-wrap {
+                grid-template-columns: 1fr
+            }
+        }
+
+        #blochCanvas {
+            width: 100%;
+            height: auto;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px
+        }
+
+        /* ml converter */
+        .converter-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px
+        }
+
+        @media(max-width:860px) {
+            .converter-wrap {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .code-panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            overflow: hidden
+        }
+
+        .code-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--line);
+            background: var(--panel-2)
+        }
+
+        .code-panel-head span {
+            font-size: 11.5px;
+            color: var(--ink-dim);
+            font-family: var(--mono)
+        }
+
+        .code-panel textarea {
+            width: 100%;
+            height: 280px;
+            background: var(--panel);
+            border: none;
+            color: var(--ink);
+            font-family: var(--mono);
+            font-size: 12.5px;
+            padding: 14px;
+            resize: vertical;
+            line-height: 1.7
+        }
+
+        .code-panel pre {
+            margin: 0;
+            padding: 14px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+            color: var(--q0);
+            height: 280px;
+            overflow: auto;
+            line-height: 1.7;
+            white-space: pre-wrap
+        }
+
+        .qml-type-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 14px 0
+        }
+
+        .qml-type-row select {
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            padding: 9px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: var(--sans);
+            flex: 1
+        }
+
+        .convert-btn {
+            background: var(--q1);
+            color: var(--on-accent);
+            width: 100%
+        }
+
+        .convert-btn:hover {
+            background: #6d28d9
+        }
+
+        /* quiz */
+        .quiz-wrap {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 26px;
+            max-width: 640px
+        }
+
+        .quiz-progress {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--ink-faint);
+            margin-bottom: 14px
+        }
+
+        .quiz-q {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 18px
+        }
+
+        .quiz-opt {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            padding: 12px 14px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 13.5px
+        }
+
+        .quiz-opt:hover {
+            border-color: var(--q0)
+        }
+
+        .quiz-opt.correct {
+            border-color: var(--ok);
+            background: rgba(74, 222, 128, .1);
+            color: var(--ok)
+        }
+
+        .quiz-opt.incorrect {
+            border-color: var(--err);
+            background: rgba(251, 113, 133, .1);
+            color: var(--err)
+        }
+
+        .quiz-opt:disabled {
+            cursor: default
+        }
+
+        .quiz-feedback {
+            font-size: 13px;
+            color: var(--ink-dim);
+            margin: 14px 0;
+            min-height: 20px
+        }
+
+        .quiz-next {
+            background: var(--q0);
+            color: var(--on-accent)
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 20px 0
+        }
+
+        .quiz-result .big {
+            font-family: var(--mono);
+            font-size: 40px;
+            color: var(--xp);
+            font-weight: 700
+        }
+
+        /* activity + leaderboard */
+        .activity-grid {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-bottom: 14px
+        }
+
+        .activity-cell {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: var(--panel-2);
+            border: 1px solid var(--line)
+        }
+
+        .activity-cell.l1 {
+            background: rgba(79, 209, 255, .18);
+            border-color: rgba(79, 209, 255, .3)
+        }
+
+        .activity-cell.l2 {
+            background: rgba(79, 209, 255, .38);
+            border-color: rgba(79, 209, 255, .5)
+        }
+
+        .activity-cell.l3 {
+            background: rgba(79, 209, 255, .65);
+            border-color: var(--q0)
+        }
+
+        .activity-legend {
+            font-size: 11px;
+            color: var(--ink-faint);
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .lb-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px 16px
+        }
+
+        .lb-row.me {
+            border-color: var(--q0);
+            background: rgba(79, 209, 255, .06)
+        }
+
+        .lb-rank {
+            font-family: var(--mono);
+            font-size: 14px;
+            color: var(--ink-faint);
+            width: 26px
+        }
+
+        .lb-row:nth-child(1) .lb-rank {
+            color: var(--xp)
+        }
+
+        .lb-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--q0), var(--q1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--void);
+            flex: none
+        }
+
+        .lb-name {
+            flex: 1;
+            font-size: 13.5px;
+            font-weight: 600
+        }
+
+        .lb-name small {
+            display: block;
+            font-size: 10.5px;
+            color: var(--ink-faint);
+            font-weight: 400
+        }
+
+        .lb-xp {
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--xp)
+        }
+
+        footer {
+            padding: 36px 32px 48px;
+            text-align: center
+        }
+
+        footer p {
+            font-size: 12px;
+            color: var(--ink-faint)
+        }
+
+        footer .foot-mark {
+            margin-bottom: 10px;
+            opacity: .6
+        }
+
+        @media(max-width:900px) {
+            :root {
+                --rail-w: 270px
+            }
+
+            #rail {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                transform: translateX(-100%);
+                transition: transform .25s ease;
+                box-shadow: 20px 0 40px rgba(0, 0, 0, .4)
+            }
+
+            #rail.open {
+                transform: translateX(0)
+            }
+
+            .rail-close {
+                display: block
+            }
+
+            .rail-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: left
+            }
+
+            .quantum-core-wrap {
+                max-width: 260px
+            }
+
+            .topbar-title {
+                display: none
+            }
+        }
+
+        @media(max-width:600px) {
+            .section {
+                padding: 40px 18px
+            }
+
+            .hero {
+                padding: 44px 18px 40px
+            }
+
+            .login-card {
+                padding: 30px 22px 24px
+            }
+
+            .topbar {
+                padding: 12px 18px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loginScreen">
+        <canvas id="loginCanvas"></canvas>
+        <div class="login-card">
+            <div class="login-brand">
+                <div class="login-brand-mark">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="#4FD1FF" stroke-width="1.4" opacity="0.5" />
+                        <ellipse cx="20" cy="20" rx="18" ry="7" stroke="#B084F5" stroke-width="1.4" opacity="0.6" />
+                        <circle cx="20" cy="20" r="5.5" fill="#4FD1FF" />
+                    </svg>
+                </div>
+                <div class="login-brand-text">Quantum<span>ML</span></div>
+            </div>
+
+            <div class="login-tabs">
+                <button class="login-tab active" id="tabLogin" onclick="switchAuthTab('login')">Log in</button>
+                <button class="login-tab" id="tabSignup" onclick="switchAuthTab('signup')">Sign up</button>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="field">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="field">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="********" required>
+                </div>
+                <div class="form-error" id="loginError"></div>
+                <button type="submit" class="btn btn-primary">Log in</button>
+            </form>
+
+            <form id="signupForm" class="hidden" onsubmit="handleSignup(event)">
+                <div class="field">
+                    <label for="signupName">Name</label>
+                    <input type="text" id="signupName" placeholder="Ada Lovelace" required>
+                </div>
+                <div class="field">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="field">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="At least 4 characters" required
+                        minlength="4">
+                </div>
+                <div class="form-error" id="signupError"></div>
+                <button type="submit" class="btn btn-primary">Create account</button>
+            </form>
+
+            <div class="login-guest">or <button onclick="handleGuest()">continue as a guest explorer</button></div>
+            <div class="login-hint">Progress is saved to this browser using localStorage.<br>No data leaves your device.
+            </div>
+        </div>
+    </div>
+
+    <div id="railScrim" onclick="toggleRail(false)"></div>
+
+    <div id="app" class="hidden">
+        <aside id="rail">
+            <div class="rail-brand">
+                <div class="rail-brand-mark">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="#4FD1FF" stroke-width="1.4" opacity="0.5" />
+                        <ellipse cx="20" cy="20" rx="18" ry="7" stroke="#B084F5" stroke-width="1.4" opacity="0.6" />
+                        <circle cx="20" cy="20" r="5.5" fill="#4FD1FF" />
+                    </svg>
+                </div>
+                <div class="rail-brand-text">Quantum<span>ML</span></div>
+                <button class="rail-close" onclick="toggleRail(false)">✕</button>
+            </div>
+
+            <div class="student-card">
+                <div class="student-top">
+                    <div class="student-avatar" id="avatarInitial">A</div>
+                    <div class="student-id">
+                        <div class="student-name" id="studentName">—</div>
+                        <div class="student-email" id="studentEmail">—</div>
+                    </div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-chip xp">
+                        <div class="v" id="statXP">0</div>
+                        <div class="l">XP</div>
+                    </div>
+                    <div class="stat-chip streak">
+                        <div class="v" id="statStreak">0🔥</div>
+                        <div class="l">STREAK</div>
+                    </div>
+                    <div class="stat-chip rank">
+                        <div class="v" id="statRank">Novice</div>
+                        <div class="l">RANK</div>
+                    </div>
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-label"><span>Learning progress</span><span id="progressPct">0%</span></div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="rail-nav">
+                <div class="rail-section-label">Learning path</div>
+                <button class="rail-link" data-target="fundamentals" onclick="navTo('fundamentals')"><span
+                        class="ico">🧠</span><span>Quantum Fundamentals</span><span class="check"
+                        data-lesson="fundamentals"></span></button>
+                <button class="rail-link" data-target="gates" onclick="navTo('gates')"><span
+                        class="ico">🔲</span><span>Quantum Gates</span><span class="check"
+                        data-lesson="gates"></span></button>
+                <button class="rail-link" data-target="simulator" onclick="navTo('simulator')"><span
+                        class="ico">🧪</span><span>Circuits &amp; Simulator</span><span class="check"
+                        data-lesson="simulator"></span></button>
+                <button class="rail-link" data-target="bloch" onclick="navTo('bloch')"><span
+                        class="ico">🌐</span><span>Bloch Sphere</span><span class="check"
+                        data-lesson="bloch"></span></button>
+                <button class="rail-link" data-target="algorithms" onclick="navTo('algorithms')"><span
+                        class="ico">⚙️</span><span>Quantum Algorithms</span><span class="check"
+                        data-lesson="algorithms"></span></button>
+                <button class="rail-link" data-target="qml" onclick="navTo('qml')"><span
+                        class="ico">🤖</span><span>Quantum ML</span><span class="check"
+                        data-lesson="qml"></span></button>
+                <button class="rail-link" data-target="converter" onclick="navTo('converter')"><span
+                        class="ico">🔁</span><span>ML → QML Converter</span><span class="check"
+                        data-lesson="converter"></span></button>
+                <button class="rail-link" data-target="quiz" onclick="navTo('quiz')"><span
+                        class="ico">✅</span><span>Quiz</span><span class="check" data-lesson="quiz"></span></button>
+
+                <div class="rail-section-label">Community</div>
+                <button class="rail-link" data-target="applications" onclick="navTo('applications')"><span
+                        class="ico">📚</span><span>Applications</span></button>
+                <button class="rail-link" data-target="activity" onclick="navTo('activity')"><span
+                        class="ico">📈</span><span>Daily Activity</span></button>
+                <button class="rail-link" data-target="leaderboard" onclick="navTo('leaderboard')"><span
+                        class="ico">🏆</span><span>Leaderboard</span></button>
+            </nav>
+
+            <div class="rail-footer">
+                <button class="logout-btn" onclick="handleLogout()">🚪 Log out</button>
+            </div>
+        </aside>
+
+        <div id="main">
+            <div class="topbar">
+                <button class="rail-toggle" onclick="toggleRail(true)">☰</button>
+                <div class="topbar-title">Welcome back, <b id="topbarName">Explorer</b></div>
+                <div class="topbar-spacer"></div>
+                <div class="topbar-xp">⭐ <span id="topbarXP">0</span> XP</div>
+            </div>
+
+            <section class="hero" id="home">
+                <canvas id="heroParticles"></canvas>
+                <div class="hero-grid">
+                    <div>
+                        <div class="hero-eyebrow">Course = "Quantum Computing + Machine learning"</div>
+                        <h1>Learn quantum computing<br>by building <em>quantum machine learning.</em></h1>
+                        <p>Simulate real qubits, chain gates into circuits, watch the state on a Bloch sphere, and
+                            translate classical ML models into quantum circuits — all in your browser, no lab required.
+                        </p>
+                        <div class="hero-actions">
+                            <button class="btn btn-primary btn-hero" onclick="navTo('fundamentals')">Start
+                                learning</button>
+                            <button class="btn btn-ghost btn-hero" onclick="navTo('simulator')">Open the
+                                simulator</button>
+                        </div>
+                    </div>
+                    <div class="quantum-scene">
+
+                        <div class="orbit orbit1"></div>
+                        <div class="orbit orbit2"></div>
+                        <div class="orbit orbit3"></div>
+
+                        <div class="quantum-core"></div>
+
+                        <div class="particle p1"></div>
+                        <div class="particle p2"></div>
+                        <div class="particle p3"></div>
+                        <div class="particle p4"></div>
+                        <div class="particle p5"></div>
+                        <div class="particle p6"></div>
+                        <div class="particle p7"></div>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="section" id="fundamentals">
+                <div class="section-head">
+                    <div class="section-kicker">01 · Lesson</div>
+                    <h2>Quantum Fundamentals</h2>
+                    <p>The four ideas everything else in this course builds on.</p>
+                </div>
+                <div class="card-grid">
+                    <div class="info-card">
+                        <h3>What is quantum computing?</h3>
+                        <p>A quantum computer stores and processes information using qubits instead of bits. Instead of
+                            following one path through a problem, it lets many possibilities interfere with each other,
+                            which is useful for a narrow but powerful class of problems.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Qubits</h3>
+                        <p>A classical bit is 0 or 1. A qubit's state is described by two complex numbers, its
+                            amplitudes, one attached to |0⟩ and one to |1⟩. Squaring an amplitude's size gives the
+                            probability of measuring that outcome.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Superposition</h3>
+                        <p>A qubit can hold a weighted combination of |0⟩ and |1⟩ at once. It isn't "both at the same
+                            time" so much as undecided until measured — the weights determine how the coin lands.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Entanglement</h3>
+                        <p>Two qubits can become linked so that measuring one instantly tells you about the other, no
+                            matter how the combined state is split apart. Entanglement is the resource behind CNOT gates
+                            and most quantum speedups.</p>
+                    </div>
+                </div>
+                <button class="mark-complete" data-lesson="fundamentals"
+                    onclick="markComplete('fundamentals', this)">Mark lesson as complete</button>
+            </section>
+
+            <section class="section" id="gates">
+                <div class="section-head">
+                    <div class="section-kicker">02 · Lesson</div>
+                    <h2>Quantum Gates</h2>
+                    <p>Gates rotate a qubit's amplitudes. Combine them to build any circuit — try them live in the
+                        simulator below.</p>
+                </div>
+                <div class="card-grid">
+                    <div class="gate-card">
+                        <div class="gate-symbol">H</div>
+                        <h3>Hadamard</h3>
+                        <p>Puts a qubit into equal superposition of |0⟩ and |1⟩.</p>
+                        <div class="gate-matrix">1/√2 [ 1 1 ]
+                            [ 1 -1 ]</div>
+                    </div>
+                    <div class="gate-card">
+                        <div class="gate-symbol">X</div>
+                        <h3>Pauli-X</h3>
+                        <p>The quantum NOT gate — flips |0⟩ and |1⟩.</p>
+                        <div class="gate-matrix">[ 0 1 ]
+                            [ 1 0 ]</div>
+                    </div>
+                    <div class="gate-card">
+                        <div class="gate-symbol">Y</div>
+                        <h3>Pauli-Y</h3>
+                        <p>Flips the state and rotates its phase by 90°.</p>
+                        <div class="gate-matrix">[ 0 -i ]
+                            [ i 0 ]</div>
+                    </div>
+                    <div class="gate-card">
+                        <div class="gate-symbol">Z</div>
+                        <h3>Pauli-Z</h3>
+                        <p>Leaves |0⟩ unchanged, flips the phase of |1⟩.</p>
+                        <div class="gate-matrix">[ 1 0 ]
+                            [ 0 -1 ]</div>
+                    </div>
+                    <div class="gate-card">
+                        <div class="gate-symbol">RY</div>
+                        <h3>RY(θ) rotation</h3>
+                        <p>Tilts a qubit by angle θ — the tunable gate variational circuits are built from.</p>
+                        <div class="gate-matrix">[ cosθ/2 -sinθ/2 ]
+                            [ sinθ/2 cosθ/2 ]</div>
+                    </div>
+                    <div class="gate-card">
+                        <div class="gate-symbol">⊕</div>
+                        <h3>CNOT</h3>
+                        <p>Flips a target qubit only if the control qubit is |1⟩. This is how entanglement is created.
+                        </p>
+                        <div class="gate-matrix">|00⟩→|00⟩ |10⟩→|11⟩
+                            |01⟩→|01⟩ |11⟩→|10⟩</div>
+                    </div>
+                </div>
+                <button class="mark-complete" data-lesson="gates" onclick="markComplete('gates', this)">Mark lesson as
+                    complete</button>
+            </section>
+
+            <section class="section" id="simulator">
+                <div class="section-head">
+                    <div class="section-kicker">03 · Lesson</div>
+                    <h2>Circuits &amp; Simulator</h2>
+                    <p>Build a 2-qubit circuit gate by gate and watch the statevector update in real time.</p>
+                </div>
+                <div class="sim-wrap">
+                    <div class="sim-panel">
+                        <h3>Build circuit</h3>
+                        <div class="qubit-select">
+                            <span>Target qubit</span>
+                            <select id="targetQubit">
+                                <option value="0">q0</option>
+                                <option value="1">q1</option>
+                            </select>
+                        </div>
+                        <div class="gate-picker">
+                            <button class="gate-btn" onclick="addGate('H')">H</button>
+                            <button class="gate-btn" onclick="addGate('X')">X</button>
+                            <button class="gate-btn" onclick="addGate('Y')">Y</button>
+                            <button class="gate-btn" onclick="addGate('Z')">Z</button>
+                            <button class="gate-btn" onclick="addGate('RY')">RY</button>
+                            <button class="gate-btn cnot" onclick="addGate('CNOT')">CNOT q0→q1</button>
+                            <button class="gate-btn cnot" onclick="addGate('CNOT10')">CNOT q1→q0</button>
+                        </div>
+                        <div class="ry-row">
+                            <span class="mono" style="font-size:12px;color:var(--ink-dim)">RY angle</span>
+                            <input type="range" id="ryAngle" min="0" max="360" value="90">
+                            <span class="ry-val" id="ryAngleVal">90°</span>
+                        </div>
+                        <h3 style="margin-top:4px">Circuit</h3>
+                        <div class="circuit-track" id="circuitTrack"><span class="circuit-empty">No gates yet — add one
+                                above.</span></div>
+                        <div class="sim-actions">
+                            <button class="btn btn-run" onclick="runCircuit()">▶ Run circuit</button>
+                            <button class="btn btn-reset" onclick="resetCircuit()">Reset</button>
+                        </div>
+                    </div>
+                    <div class="sim-panel">
+                        <h3>Measurement probabilities</h3>
+                        <div class="state-bars" id="stateBars"></div>
+                        <h3>Amplitudes</h3>
+                        <div class="amp-list" id="ampList"></div>
+                    </div>
+                </div>
+                <button class="mark-complete" data-lesson="simulator" onclick="markComplete('simulator', this)">Mark
+                    lesson as complete</button>
+            </section>
+
+            <section class="section" id="bloch">
+                <div class="section-head">
+                    <div class="section-kicker">Visualization</div>
+                    <h2>Bloch Sphere</h2>
+                    <p>A single qubit's state can be drawn as a point on a sphere. Drag the sliders and watch the vector
+                        move.</p>
+                </div>
+                <div class="bloch-wrap">
+                    <canvas id="blochCanvas" width="480" height="420"></canvas>
+                    <div class="sim-panel">
+                        <h3>Explore the qubit</h3>
+                        <div class="ry-row">
+                            <span class="mono" style="font-size:12px;color:var(--ink-dim);width:50px">Theta</span>
+                            <input type="range" id="blochTheta" min="0" max="180" value="90">
+                            <span class="ry-val" id="blochThetaVal">90°</span>
+                        </div>
+                        <div class="ry-row">
+                            <span class="mono" style="font-size:12px;color:var(--ink-dim);width:50px">Phi</span>
+                            <input type="range" id="blochPhi" min="0" max="360" value="0">
+                            <span class="ry-val" id="blochPhiVal">0°</span>
+                        </div>
+                        <p style="font-size:13px;color:var(--ink-dim);margin-top:10px">θ (theta) sets the mix between
+                            |0⟩ and |1⟩. φ (phi) sets the relative phase between them — it doesn't change measurement
+                            odds, but it matters once qubits start interacting.</p>
+                    </div>
+                </div>
+                <button class="mark-complete" data-lesson="bloch" onclick="markComplete('bloch', this)">Mark lesson as
+                    complete</button>
+            </section>
+
+            <section class="section" id="algorithms">
+                <div class="section-head">
+                    <div class="section-kicker">04 · Lesson</div>
+                    <h2>Quantum Algorithms</h2>
+                    <p>What these gate sequences make possible once you scale them up.</p>
+                </div>
+                <div class="card-grid">
+                    <div class="info-card">
+                        <h3>Deutsch–Jozsa <span class="tag">1 query</span></h3>
+                        <p>Decides whether a hidden function is constant or balanced in a single evaluation, where a
+                            classical computer would need to check over half of its inputs.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Grover's search <span class="tag">√N</span></h3>
+                        <p>Finds a marked item in an unsorted list of N items using roughly √N steps, a quadratic
+                            speedup over classical search, by repeatedly amplifying the right answer's amplitude.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Quantum Fourier Transform <span class="tag">QFT</span></h3>
+                        <p>The quantum analogue of the discrete Fourier transform, and the engine inside Shor's
+                            factoring algorithm and quantum phase estimation.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>VQE <span class="tag">hybrid</span></h3>
+                        <p>The Variational Quantum Eigensolver pairs a parameterized circuit with a classical optimizer
+                            to estimate a molecule's lowest energy state — a bridge between today's noisy hardware and
+                            useful chemistry.</p>
+                    </div>
+                </div>
+                <button class="mark-complete" data-lesson="algorithms" onclick="markComplete('algorithms', this)">Mark
+                    lesson as complete</button>
+            </section>
+
+            <section class="section" id="qml">
+                <div class="section-head">
+                    <div class="section-kicker">05 · Lesson</div>
+                    <h2>Quantum Machine Learning</h2>
+                    <p>Where quantum circuits and machine learning models meet.</p>
+                </div>
+                <div class="card-grid">
+                    <div class="info-card">
+                        <h3>Quantum Neural Network</h3>
+                        <p>Replaces classical neurons with layers of parameterized rotation and entangling gates,
+                            trained by adjusting angles instead of weights.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Quantum Classifier</h3>
+                        <p>Encodes data into qubit states, runs a variational circuit, then measures a qubit to output a
+                            class label — trained with a parameter-shift gradient rule.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Quantum Kernel</h3>
+                        <p>Uses a quantum circuit to map data into a very high-dimensional space, then measures
+                            similarity between states — plugging into classical kernel methods like SVMs.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Hybrid ML</h3>
+                        <p>Most near-term QML runs a quantum circuit for one part of the model and a classical network
+                            for the rest, passing gradients back and forth between them.</p>
+                    </div>
+                </div>
+                <button class="mark-complete" data-lesson="qml" onclick="markComplete('qml', this)">Mark lesson as
+                    complete</button>
+            </section>
+
+            <section class="section" id="converter">
+                <div class="section-head">
+                    <div class="section-kicker">06 · Lab</div>
+                    <h2>ML → QML Converter</h2>
+                    <p>Paste a small classical model and see a conceptual quantum-circuit equivalent. This is a teaching
+                        aid, not a real transpiler.</p>
+                </div>
+                <div class="qml-type-row">
+                    <span class="mono" style="font-size:12px;color:var(--ink-dim);white-space:nowrap">QML type</span>
+                    <select id="qmlType">
+                        <option value="variational">Variational Classifier</option>
+                        <option value="kernel">Quantum Kernel Method</option>
+                        <option value="qnn">Quantum Neural Network</option>
+                        <option value="hybrid">Hybrid CNN–QNN</option>
+                    </select>
+                </div>
+                <div class="converter-wrap">
+                    <div class="code-panel">
+                        <div class="code-panel-head"><span>ml_model.py</span></div>
+                        <textarea id="mlInput">model = Sequential()
+model.add(Dense(8, activation="relu"))
+model.add(Dense(4, activation="relu"))
+model.add(Dense(1, activation="sigmoid"))
+model.fit(X_train, y_train, epochs=20)</textarea>
+                    </div>
+                    <div class="code-panel">
+                        <div class="code-panel-head"><span>qml_circuit.py</span></div>
+                        <pre id="qmlOutput">// Click "Convert" to generate a quantum circuit.</pre>
+                    </div>
+                </div>
+                <button class="btn convert-btn" style="margin-top:16px;max-width:220px" onclick="convertCode()">🔁
+                    Convert to QML</button>
+                <button class="mark-complete" data-lesson="converter" onclick="markComplete('converter', this)">Mark
+                    lesson as complete</button>
+            </section>
+
+            <section class="section" id="quiz">
+                <div class="section-head">
+                    <div class="section-kicker">07 · Check yourself</div>
+                    <h2>Quiz</h2>
+                    <p>Eight questions covering everything above. Correct answers earn XP.</p>
+                </div>
+                <div class="quiz-wrap" id="quizWrap"></div>
+            </section>
+
+            <section class="section" id="applications">
+                <div class="section-head">
+                    <div class="section-kicker">Reference</div>
+                    <h2>Quantum + ML Applications</h2>
+                    <p>Where this combination is already being explored in industry and research.</p>
+                </div>
+                <div class="card-grid">
+                    <div class="info-card">
+                        <h3>Drug discovery</h3>
+                        <p>Simulating molecular energy states to screen candidate compounds faster than classical
+                            chemistry solvers.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Portfolio optimization</h3>
+                        <p>Using quantum annealing and QAOA to search combinatorial trading and allocation strategies.
+                        </p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Cryptography</h3>
+                        <p>Both a threat to classical encryption via Shor's algorithm and the basis of new quantum-safe
+                            key distribution.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Materials science</h3>
+                        <p>Modeling superconductors and battery chemistries whose quantum behavior classical computers
+                            approximate poorly.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="activity">
+                <div class="section-head">
+                    <div class="section-kicker">Progress</div>
+                    <h2>Daily Activity</h2>
+                    <p>Lessons and quiz attempts completed over the last four weeks.</p>
+                </div>
+                <div class="activity-grid" id="activityGrid"></div>
+                <div class="activity-legend">
+                    <span>Less</span>
+                    <span class="activity-cell" style="width:14px;height:14px"></span>
+                    <span class="activity-cell l1" style="width:14px;height:14px"></span>
+                    <span class="activity-cell l2" style="width:14px;height:14px"></span>
+                    <span class="activity-cell l3" style="width:14px;height:14px"></span>
+                    <span>More</span>
+                </div>
+            </section>
+
+            <section class="section" id="leaderboard">
+                <div class="section-head">
+                    <div class="section-kicker">Community</div>
+                    <h2>Student Leaderboard</h2>
+                    <p>Ranked by total XP earned across all learners on this device.</p>
+                </div>
+                <div class="leaderboard-list" id="leaderboardList"></div>
+            </section>
+
+            <footer>
+                <div class="foot-mark">⟨ψ| QuantumML |ψ⟩</div>
+                <p>Built for learning quantum computing and quantum machine learning, one gate at a time.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        /* ---------- storage ---------- */
+        const LS_USERS = 'qml_users';
+        const LS_SESSION = 'qml_session';
+        const LS_LEADERBOARD = 'qml_leaderboard';
+
+        const LESSONS = ['fundamentals', 'gates', 'simulator', 'bloch', 'algorithms', 'qml', 'converter', 'quiz'];
+        const RANKS = [
+            { min: 0, name: 'Novice' },
+            { min: 150, name: 'Apprentice' },
+            { min: 400, name: 'Qubit Explorer' },
+            { min: 800, name: 'Quantum Engineer' },
+            { min: 1500, name: 'Quantum Master' }
+        ];
+
+        function loadUsers() { try { return JSON.parse(localStorage.getItem(LS_USERS)) || {}; } catch (e) { return {}; } }
+        function saveUsers(u) { localStorage.setItem(LS_USERS, JSON.stringify(u)); }
+        function getSession() { try { return JSON.parse(localStorage.getItem(LS_SESSION)); } catch (e) { return null; } }
+        function setSession(email) { localStorage.setItem(LS_SESSION, JSON.stringify({ email })); }
+        function clearSession() { localStorage.removeItem(LS_SESSION); }
+
+        function defaultProfile(name, email) {
+            return { name, email, xp: 0, streak: 0, lastActive: null, completed: {}, activity: {} };
+        }
+
+        let currentUser = null;
+
+        function todayStr(d) { d = d || new Date(); return d.toISOString().slice(0, 10); }
+
+        function touchStreakAndActivity() {
+            const today = todayStr();
+            const last = currentUser.lastActive;
+            if (last !== today) {
+                if (last) {
+                    const diffDays = Math.round((new Date(today) - new Date(last)) / 86400000);
+                    currentUser.streak = diffDays === 1 ? currentUser.streak + 1 : 1;
+                } else {
+                    currentUser.streak = 1;
+                }
+                currentUser.lastActive = today;
+            }
+            currentUser.activity[today] = (currentUser.activity[today] || 0) + 1;
+        }
+
+        function rankForXP(xp) {
+            let r = RANKS[0].name;
+            for (const tier of RANKS) { if (xp >= tier.min) r = tier.name; }
+            return r;
+        }
+
+        function persistCurrentUser() {
+            const users = loadUsers();
+            users[currentUser.email] = currentUser;
+            saveUsers(users);
+            syncLeaderboard();
+        }
+
+        function syncLeaderboard() {
+            let lb;
+            try { lb = JSON.parse(localStorage.getItem(LS_LEADERBOARD)) || null; } catch (e) { lb = null; }
+            if (!lb) {
+                lb = [
+                    { name: 'Ava Chen', xp: 620, bot: true },
+                    { name: 'Marcus Webb', xp: 410, bot: true },
+                    { name: 'Priya Nair', xp: 980, bot: true },
+                    { name: 'Sofia Ruiz', xp: 260, bot: true },
+                    { name: 'Kenji Sato', xp: 145, bot: true }
+                ];
+            }
+            lb = lb.filter(e => e.bot);
+            lb.push({ name: currentUser.name, xp: currentUser.xp, bot: false, me: true });
+            localStorage.setItem(LS_LEADERBOARD, JSON.stringify(lb));
+            renderLeaderboard(lb);
+        }
+
+        /* ---------- auth screen ---------- */
+        function switchAuthTab(which) {
+            document.getElementById('tabLogin').classList.toggle('active', which === 'login');
+            document.getElementById('tabSignup').classList.toggle('active', which === 'signup');
+            document.getElementById('loginForm').classList.toggle('hidden', which !== 'login');
+            document.getElementById('signupForm').classList.toggle('hidden', which !== 'signup');
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signupPassword').value;
+            const errEl = document.getElementById('signupError');
+            const users = loadUsers();
+            if (users[email]) { errEl.textContent = 'An account with this email already exists.'; return; }
+            const profile = defaultProfile(name, email);
+            profile.password = password;
+            users[email] = profile;
+            saveUsers(users);
+            errEl.textContent = '';
+            loginAs(email);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+            const errEl = document.getElementById('loginError');
+            const users = loadUsers();
+            const u = users[email];
+            if (!u || u.password !== password) { errEl.textContent = 'Incorrect email or password.'; return; }
+            errEl.textContent = '';
+            loginAs(email);
+        }
+
+        function handleGuest() {
+            const email = 'guest@quantumml.local';
+            const users = loadUsers();
+            if (!users[email]) {
+                const profile = defaultProfile('Guest Explorer', email);
+                profile.password = '';
+                users[email] = profile;
+                saveUsers(users);
+            }
+            loginAs(email);
+        }
+
+        function loginAs(email) {
+            const users = loadUsers();
+            currentUser = users[email];
+            setSession(email);
+            touchStreakAndActivity();
+            persistCurrentUser();
+            enterApp();
+        }
+
+        function handleLogout() {
+            clearSession();
+            currentUser = null;
+            document.getElementById('app').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+            document.getElementById('signupForm').reset();
+        }
+
+        /* ---------- app render ---------- */
+        function enterApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            renderDashboard();
+            renderChecklist();
+            renderActivityGrid();
+            syncLeaderboard();
+            buildQuiz();
+            drawBloch();
+            document.getElementById('main').scrollTop = 0;
+        }
+
+        function renderDashboard() {
+            const initial = (currentUser.name || '?').trim().charAt(0).toUpperCase() || '?';
+            document.getElementById('avatarInitial').textContent = initial;
+            document.getElementById('studentName').textContent = currentUser.name;
+            document.getElementById('studentEmail').textContent = currentUser.email;
+            document.getElementById('topbarName').textContent = currentUser.name.split(' ')[0];
+            document.getElementById('statXP').textContent = currentUser.xp;
+            document.getElementById('topbarXP').textContent = currentUser.xp;
+            document.getElementById('statStreak').textContent = currentUser.streak + '🔥';
+            document.getElementById('statRank').textContent = rankForXP(currentUser.xp);
+
+            const doneCount = LESSONS.filter(l => currentUser.completed[l]).length;
+            const pct = Math.round((doneCount / LESSONS.length) * 100);
+            document.getElementById('progressPct').textContent = pct + '%';
+            document.getElementById('progressFill').style.width = pct + '%';
+        }
+
+        function renderChecklist() {
+            document.querySelectorAll('.check').forEach(el => {
+                const lesson = el.dataset.lesson;
+                const done = !!currentUser.completed[lesson];
+                el.closest('.rail-link').classList.toggle('done', done);
+                el.textContent = done ? '✓' : '';
+            });
+            document.querySelectorAll('.mark-complete').forEach(btn => {
+                const lesson = btn.dataset.lesson;
+                const done = !!currentUser.completed[lesson];
+                btn.classList.toggle('done', done);
+                btn.textContent = done ? '✓ Lesson complete' : 'Mark lesson as complete';
+            });
+        }
+
+        function markComplete(lesson, btn) {
+            if (currentUser.completed[lesson]) return;
+            currentUser.completed[lesson] = true;
+            currentUser.xp += 40;
+            touchStreakAndActivity();
+            persistCurrentUser();
+            renderDashboard();
+            renderChecklist();
+            renderActivityGrid();
+        }
+
+        function awardXP(amount) {
+            currentUser.xp = Math.max(0, currentUser.xp + amount);
+            touchStreakAndActivity();
+            persistCurrentUser();
+            renderDashboard();
+            renderActivityGrid();
+        }
+
+        function navTo(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.querySelectorAll('.rail-link').forEach(l => l.classList.toggle('active', l.dataset.target === id));
+            toggleRail(false);
+        }
+        function toggleRail(open) {
+            document.getElementById('rail').classList.toggle('open', open);
+            document.getElementById('railScrim').style.display = open ? 'block' : 'none';
+        }
+
+        function renderActivityGrid() {
+            const grid = document.getElementById('activityGrid');
+            grid.innerHTML = '';
+            const days = 28;
+            const today = new Date();
+            for (let i = days - 1; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(d.getDate() - i);
+                const key = todayStr(d);
+                const count = currentUser.activity[key] || 0;
+                const cell = document.createElement('div');
+                let cls = 'activity-cell';
+                if (count >= 4) cls += ' l3'; else if (count >= 2) cls += ' l2'; else if (count >= 1) cls += ' l1';
+                cell.className = cls;
+                cell.title = key + ': ' + count + ' action(s)';
+                grid.appendChild(cell);
+            }
+        }
+
+        function renderLeaderboard(lb) {
+            const sorted = [...lb].sort((a, b) => b.xp - a.xp);
+            const list = document.getElementById('leaderboardList');
+            list.innerHTML = '';
+            sorted.forEach((entry, i) => {
+                const row = document.createElement('div');
+                row.className = 'lb-row' + (entry.me ? ' me' : '');
+                const initial = entry.name.trim().charAt(0).toUpperCase();
+                row.innerHTML =
+                    '<div class="lb-rank">#' + (i + 1) + '</div>' +
+                    '<div class="lb-avatar">' + initial + '</div>' +
+                    '<div class="lb-name">' + entry.name + (entry.me ? '<small>You</small>' : '') + '</div>' +
+                    '<div class="lb-xp">' + entry.xp + ' XP</div>';
+                list.appendChild(row);
+            });
+        }
+
+        /* ---------- 2-qubit statevector simulator ---------- */
+        function c(re, im) { return { re: re || 0, im: im || 0 }; }
+        function cAdd(a, b) { return c(a.re + b.re, a.im + b.im); }
+        function cMul(a, b) { return c(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re); }
+
+        function matVec(mat, vec) {
+            const out = [];
+            for (let i = 0; i < 4; i++) {
+                let sum = c(0, 0);
+                for (let j = 0; j < 4; j++) sum = cAdd(sum, cMul(mat[i][j], vec[j]));
+                out.push(sum);
+            }
+            return out;
+        }
+
+        function kron2(a, b) {
+            const out = [];
+            for (let i = 0; i < 2; i++) {
+                for (let k = 0; k < 2; k++) {
+                    const row = [];
+                    for (let j = 0; j < 2; j++) {
+                        for (let l = 0; l < 2; l++) row.push(cMul(a[i][j], b[k][l]));
+                    }
+                    out.push(row);
+                }
+            }
+            return out;
+        }
+
+        const I2 = [[c(1), c(0)], [c(0), c(1)]];
+        function gate2(name, thetaRad) {
+            const s = 1 / Math.sqrt(2);
+            switch (name) {
+                case 'H': return [[c(s), c(s)], [c(s), c(-s)]];
+                case 'X': return [[c(0), c(1)], [c(1), c(0)]];
+                case 'Y': return [[c(0), c(0, -1)], [c(0, 1), c(0)]];
+                case 'Z': return [[c(1), c(0)], [c(0), c(-1)]];
+                case 'RY': {
+                    const cos = Math.cos(thetaRad / 2), sin = Math.sin(thetaRad / 2);
+                    return [[c(cos), c(-sin)], [c(sin), c(cos)]];
+                }
+                default: return I2;
+            }
+        }
+
+        const CNOT_01 = [
+            [c(1), c(0), c(0), c(0)],
+            [c(0), c(1), c(0), c(0)],
+            [c(0), c(0), c(0), c(1)],
+            [c(0), c(0), c(1), c(0)]
+        ];
+        const CNOT_10 = [
+            [c(1), c(0), c(0), c(0)],
+            [c(0), c(0), c(0), c(1)],
+            [c(0), c(0), c(1), c(0)],
+            [c(0), c(1), c(0), c(0)]
+        ];
+
+        let circuitOps = [];
+        let currentState = [c(1), c(0), c(0), c(0)];
+
+        function addGate(type) {
+            if (type === 'CNOT') circuitOps.push({ type: 'CNOT01' });
+            else if (type === 'CNOT10') circuitOps.push({ type: 'CNOT10' });
+            else {
+                const qubit = parseInt(document.getElementById('targetQubit').value, 10);
+                let theta = null;
+                if (type === 'RY') theta = parseInt(document.getElementById('ryAngle').value, 10) * Math.PI / 180;
+                circuitOps.push({ type, qubit, theta });
+            }
+            renderCircuitTrack();
+        }
+
+        function removeGate(idx) { circuitOps.splice(idx, 1); renderCircuitTrack(); }
+
+        function resetCircuit() {
+            circuitOps = [];
+            currentState = [c(1), c(0), c(0), c(0)];
+            renderCircuitTrack();
+            renderState();
+        }
+
+        function opLabel(op) {
+            if (op.type === 'CNOT01') return 'CNOT q0→q1';
+            if (op.type === 'CNOT10') return 'CNOT q1→q0';
+            if (op.type === 'RY') return 'RY(' + Math.round(op.theta * 180 / Math.PI) + '°) q' + op.qubit;
+            return op.type + ' q' + op.qubit;
+        }
+
+        function renderCircuitTrack() {
+            const track = document.getElementById('circuitTrack');
+            track.innerHTML = '';
+            if (circuitOps.length === 0) {
+                track.innerHTML = '<span class="circuit-empty">No gates yet — add one above.</span>';
+                return;
+            }
+            circuitOps.forEach((op, i) => {
+                const el = document.createElement('div');
+                el.className = 'circuit-op';
+                el.innerHTML = '<span>' + (i + 1) + '. ' + opLabel(op) + '</span><button onclick="removeGate(' + i + ')">✕</button>';
+                track.appendChild(el);
+            });
+        }
+
+        function runCircuit() {
+            let state = [c(1), c(0), c(0), c(0)];
+            circuitOps.forEach(op => {
+                let full;
+                if (op.type === 'CNOT01') full = CNOT_01;
+                else if (op.type === 'CNOT10') full = CNOT_10;
+                else {
+                    const g = gate2(op.type, op.theta);
+                    full = op.qubit === 0 ? kron2(g, I2) : kron2(I2, g);
+                }
+                state = matVec(full, state);
+            });
+            currentState = state;
+            renderState();
+            awardXP(2);
+        }
+
+        function renderState() {
+            const kets = ['|00⟩', '|01⟩', '|10⟩', '|11⟩'];
+            const barsEl = document.getElementById('stateBars');
+            const ampEl = document.getElementById('ampList');
+            barsEl.innerHTML = '';
+            const ampLines = [];
+            currentState.forEach((amp, i) => {
+                const prob = amp.re * amp.re + amp.im * amp.im;
+                const pct = Math.round(prob * 1000) / 10;
+                const row = document.createElement('div');
+                row.className = 'state-bar-row';
+                row.innerHTML =
+                    '<span class="state-ket">' + kets[i] + '</span>' +
+                    '<div class="state-bar-track"><div class="state-bar-fill" style="width:' + pct + '%"></div></div>' +
+                    '<span class="state-pct">' + pct + '%</span>';
+                barsEl.appendChild(row);
+                const sign = amp.im >= 0 ? '+' : '-';
+                ampLines.push(kets[i] + ':  ' + amp.re.toFixed(3) + ' ' + sign + ' ' + Math.abs(amp.im).toFixed(3) + 'i');
+            });
+            ampEl.innerHTML = ampLines.join('<br>');
+        }
+
+        /* ---------- Bloch sphere ---------- */
+        function drawBloch() {
+            const canvas = document.getElementById('blochCanvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            const cx = w / 2, cy = h / 2, r = 150;
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.strokeStyle = '#c9d0e3';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, r, r * 0.35, 0, 0, Math.PI * 2);
+            ctx.strokeStyle = '#dde3f0';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - r - 20); ctx.lineTo(cx, cy + r + 20);
+            ctx.moveTo(cx - r - 20, cy); ctx.lineTo(cx + r + 20, cy);
+            ctx.strokeStyle = '#b7c0da';
+            ctx.stroke();
+
+            ctx.fillStyle = '#5b6178';
+            ctx.font = '14px Arial';
+            ctx.fillText('|0⟩', cx + 8, cy - r - 24);
+            ctx.fillText('|1⟩', cx + 8, cy + r + 34);
+            ctx.fillText('x', cx + r + 22, cy + 5);
+
+            const theta = parseFloat(document.getElementById('blochTheta').value);
+            const phi = parseFloat(document.getElementById('blochPhi').value);
+            document.getElementById('blochThetaVal').textContent = theta.toFixed(0) + '°';
+            document.getElementById('blochPhiVal').textContent = phi.toFixed(0) + '°';
+
+            const t = theta * Math.PI / 180, p = phi * Math.PI / 180;
+            const x = Math.sin(t) * Math.cos(p), y = Math.sin(t) * Math.sin(p), z = Math.cos(t);
+            const px = cx + x * r, py = cy - z * r;
+
+            ctx.beginPath();
+            ctx.moveTo(cx, cy); ctx.lineTo(px, py);
+            ctx.strokeStyle = '#2563eb';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(px, py, 8, 0, Math.PI * 2);
+            ctx.fillStyle = '#2563eb';
+            ctx.shadowColor = '#2563eb';
+            ctx.shadowBlur = 18;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+
+        /* ---------- ML -> QML converter (pattern-based, conceptual) ---------- */
+        function convertCode() {
+            const src = document.getElementById('mlInput').value;
+            const type = document.getElementById('qmlType').value;
+            const denseMatches = [...src.matchAll(/Dense\((\d+)/g)].map(m => parseInt(m[1], 10));
+            const layerCount = Math.max(denseMatches.length, 2);
+            const qubitCount = Math.min(Math.max(Math.ceil(Math.log2(Math.max(...denseMatches, 4))), 2), 6);
+            const hasSigmoid = /sigmoid/.test(src);
+            const epochsMatch = src.match(/epochs\s*=\s*(\d+)/);
+            const epochs = epochsMatch ? epochsMatch[1] : '30';
+
+            const header = '# Conceptual QML translation (' + qubitCount + ' qubits, ' + layerCount + ' layers)\n' +
+                'import pennylane as qml\nfrom pennylane import numpy as np\n\n' +
+                'dev = qml.device("default.qubit", wires=' + qubitCount + ')\n\n';
+
+            let out;
+            if (type === 'variational') {
+                out = header +
+                    '@qml.qnode(dev)\ndef circuit(x, weights):\n' +
+                    '    for i in range(' + qubitCount + '):\n        qml.RY(x[i], wires=i)\n\n' +
+                    '    for layer in range(' + layerCount + '):\n' +
+                    '        for i in range(' + qubitCount + '):\n            qml.RY(weights[layer][i], wires=i)\n' +
+                    '        for i in range(' + qubitCount + '-1):\n            qml.CNOT(wires=[i, i+1])\n\n' +
+                    '    ' + (hasSigmoid ? 'return qml.expval(qml.PauliZ(0))  # readout ~ sigmoid output' :
+                        'return [qml.expval(qml.PauliZ(i)) for i in range(' + qubitCount + ')]') + '\n\n' +
+                    '# trained with the parameter-shift rule for ' + epochs + ' epochs';
+            } else if (type === 'kernel') {
+                out = header +
+                    'def feature_map(x, wires):\n' +
+                    '    for i, wire in enumerate(wires):\n        qml.RY(x[i], wires=wire)\n        qml.RZ(x[i], wires=wire)\n' +
+                    '    for i in range(len(wires)-1):\n        qml.CNOT(wires=[wires[i], wires[i+1]])\n\n' +
+                    '@qml.qnode(dev)\ndef kernel_circuit(x1, x2):\n' +
+                    '    feature_map(x1, wires=range(' + qubitCount + '))\n' +
+                    '    qml.adjoint(feature_map)(x2, wires=range(' + qubitCount + '))\n' +
+                    '    return qml.probs(wires=range(' + qubitCount + '))\n\n' +
+                    '# kernel(x1,x2) = probability of measuring |0...0>, fed into a classical SVM';
+            } else if (type === 'qnn') {
+                out = header +
+                    '@qml.qnode(dev, interface="torch")\ndef qnode(inputs, weights):\n' +
+                    '    for i in range(' + qubitCount + '):\n        qml.RY(inputs[i], wires=i)\n' +
+                    '    for layer in range(' + layerCount + '):\n' +
+                    '        for i in range(' + qubitCount + '):\n            qml.RY(weights[layer][i], wires=i)\n' +
+                    '        for i in range(' + qubitCount + '-1):\n            qml.CNOT(wires=[i, i+1])\n' +
+                    '    return [qml.expval(qml.PauliZ(i)) for i in range(' + qubitCount + ')]\n\n' +
+                    '# wrap qnode as a qml.qnn.TorchLayer and drop it into your model in\n' +
+                    '# place of the Dense stack, keep the classical training loop as-is';
+            } else {
+                out = header +
+                    'def classical_encoder(x):\n    # existing conv/pool layers stay as-is, output ' + qubitCount + ' features\n    ...\n\n' +
+                    '@qml.qnode(dev)\ndef quantum_head(features, weights):\n' +
+                    '    for i in range(' + qubitCount + '):\n        qml.RY(features[i], wires=i)\n' +
+                    '    for layer in range(' + layerCount + '):\n' +
+                    '        for i in range(' + qubitCount + '):\n            qml.RY(weights[layer][i], wires=i)\n' +
+                    '        for i in range(' + qubitCount + '-1):\n            qml.CNOT(wires=[i, i+1])\n' +
+                    '    return qml.expval(qml.PauliZ(0))\n\n' +
+                    '# forward pass: classical_encoder(x) -> quantum_head(...) -> loss';
+            }
+
+            document.getElementById('qmlOutput').textContent = out;
+            markComplete('converter', document.querySelector('.mark-complete[data-lesson="converter"]'));
+        }
+
+        /* ---------- quiz ---------- */
+        const QUIZ_QUESTIONS = [
+            { q: "What does a qubit's amplitude relate to when it's measured?", opts: ["Its color", "The probability of that outcome", "Its clock speed", "Nothing observable"], a: 1 },
+            { q: "Which gate creates equal superposition from |0⟩?", opts: ["X", "Z", "Hadamard (H)", "CNOT"], a: 2 },
+            { q: "What does the CNOT gate require to flip its target?", opts: ["The target must be |1⟩", "The control qubit must be |1⟩", "Both qubits must be |0⟩", "Nothing, it always flips"], a: 1 },
+            { q: "Entanglement means two qubits...", opts: ["Are physically touching", "Have correlated measurement outcomes regardless of distance", "Always measure to the same value", "Cannot be measured"], a: 1 },
+            { q: "Grover's algorithm gives what kind of speedup for unstructured search?", opts: ["Exponential", "None", "Quadratic", "Logarithmic"], a: 2 },
+            { q: "In a variational quantum classifier, what gets trained?", opts: ["The qubit count", "Rotation gate angles (parameters)", "The measurement device", "The classical dataset"], a: 1 },
+            { q: "A quantum kernel method typically feeds its output into...", opts: ["A classical SVM", "A random number generator", "Another qubit only", "Nothing further is needed"], a: 0 },
+            { q: "What best describes a hybrid quantum-classical model?", opts: ["Pure quantum circuit with no classical parts", "A classical model with quantum-sounding names", "Part of the computation runs quantum, part runs classical", "Two separate unconnected models"], a: 2 }
+        ];
+        let quizIndex = 0, quizScore = 0;
+
+        function buildQuiz() { quizIndex = 0; quizScore = 0; renderQuizQuestion(); }
+
+        function renderQuizQuestion() {
+            const wrap = document.getElementById('quizWrap');
+            if (quizIndex >= QUIZ_QUESTIONS.length) {
+                wrap.innerHTML =
+                    '<div class="quiz-result">' +
+                    '<div class="mono" style="font-size:12px;color:var(--ink-dim);margin-bottom:8px">Quiz complete</div>' +
+                    '<div class="big">' + quizScore + '/' + QUIZ_QUESTIONS.length + '</div>' +
+                    '<p style="color:var(--ink-dim);font-size:13px;margin-top:10px">+' + (quizScore * 15) + ' XP earned</p>' +
+                    '<button class="btn btn-primary" style="margin-top:18px;max-width:200px" onclick="buildQuiz()">Retake quiz</button>' +
+                    '</div>';
+                markComplete('quiz', document.querySelector('.mark-complete[data-lesson="quiz"]'));
+                return;
+            }
+            const item = QUIZ_QUESTIONS[quizIndex];
+            wrap.innerHTML =
+                '<div class="quiz-progress">QUESTION ' + (quizIndex + 1) + ' / ' + QUIZ_QUESTIONS.length + '</div>' +
+                '<div class="quiz-q">' + item.q + '</div>' +
+                '<div id="quizOpts"></div>' +
+                '<div class="quiz-feedback" id="quizFeedback"></div>';
+            const optsEl = document.getElementById('quizOpts');
+            item.opts.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.className = 'quiz-opt';
+                b.textContent = opt;
+                b.onclick = () => answerQuiz(i);
+                optsEl.appendChild(b);
+            });
+        }
+
+        function answerQuiz(i) {
+            const item = QUIZ_QUESTIONS[quizIndex];
+            const opts = document.querySelectorAll('.quiz-opt');
+            opts.forEach((b, idx) => {
+                b.disabled = true;
+                if (idx === item.a) b.classList.add('correct');
+                else if (idx === i) b.classList.add('incorrect');
+            });
+            const feedback = document.getElementById('quizFeedback');
+            if (i === item.a) {
+                quizScore++;
+                feedback.textContent = 'Correct — +15 XP';
+                feedback.style.color = 'var(--ok)';
+                awardXP(15);
+            } else {
+                feedback.textContent = 'Not quite — the highlighted answer is correct.';
+                feedback.style.color = 'var(--err)';
+            }
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn quiz-next';
+            nextBtn.style.marginTop = '6px';
+            nextBtn.textContent = quizIndex === QUIZ_QUESTIONS.length - 1 ? 'See results' : 'Next question';
+            nextBtn.onclick = () => { quizIndex++; renderQuizQuestion(); };
+            document.getElementById('quizWrap').appendChild(nextBtn);
+        }
+
+        /* ---------- login starfield canvas ---------- */
+        function initStarfield() {
+            const canvas = document.getElementById('loginCanvas');
+            const ctx = canvas.getContext('2d');
+            let w, h, stars;
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                stars = Array.from({ length: Math.floor((w * h) / 9000) }, () => ({
+                    x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.4 + 0.3,
+                    tw: Math.random() * Math.PI * 2, sp: 0.3 + Math.random() * 0.5,
+                    hue: Math.random() < 0.5 ? '37,99,235' : '124,58,237'
+                }));
+            }
+            function draw(t) {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, w, h);
+                stars.forEach(s => {
+                    const alpha = 0.4 + Math.sin(t / 1000 * s.sp + s.tw) * 0.35;
+                    ctx.beginPath();
+                    ctx.fillStyle = 'rgba(' + s.hue + ',' + Math.max(0.1, alpha) + ')';
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            window.addEventListener('resize', resize);
+            resize();
+            requestAnimationFrame(draw);
+        }
+
+        /* ---------- drifting particle field behind the hero ---------- */
+        function initHeroDrift() {
+            const canvas = document.getElementById('heroParticles');
+            const ctx = canvas.getContext('2d');
+            const hero = canvas.closest('.hero');
+            let w, h, dots;
+            function resize() {
+                w = canvas.width = hero.clientWidth;
+                h = canvas.height = hero.clientHeight;
+                dots = Array.from({ length: 60 }, () => ({
+                    x: Math.random() * w, y: Math.random() * h,
+                    vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+                    r: Math.random() * 1.6 + 0.4
+                }));
+            }
+            function step() {
+                ctx.clearRect(0, 0, w, h);
+                dots.forEach(d => {
+                    d.x += d.vx; d.y += d.vy;
+                    if (d.x < 0) d.x = w; if (d.x > w) d.x = 0;
+                    if (d.y < 0) d.y = h; if (d.y > h) d.y = 0;
+                    ctx.beginPath();
+                    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(37,99,235,.35)';
+                    ctx.fill();
+                });
+                requestAnimationFrame(step);
+            }
+            window.addEventListener('resize', resize);
+            resize();
+            requestAnimationFrame(step);
+        }
+
+        /* ---------- hero core particles ---------- */
+        function initHeroParticles() {
+            const wrap = document.getElementById('quantumHero');
+            const particles = [
+                { radius: 0.5, speed: 14, cls: '', delay: 0 },
+                { radius: 0.42, speed: 20, cls: 'p2', delay: -6 },
+                { radius: 0.5, speed: 26, cls: 'p3', delay: -14 },
+                { radius: 0.42, speed: 18, cls: '', delay: -3 }
+            ];
+            particles.forEach((p, i) => {
+                const el = document.createElement('div');
+                el.className = 'core-particle ' + p.cls;
+                wrap.appendChild(el);
+                const start = performance.now() + p.delay * 1000;
+                function animate(t) {
+                    const elapsed = (t - start) / 1000;
+                    const angle = (elapsed / p.speed) * Math.PI * 2 + i;
+                    const rect = wrap.getBoundingClientRect();
+                    const cx = rect.width / 2, cy = rect.height / 2;
+                    const rx = rect.width * p.radius, ry = rect.height * p.radius * 0.42;
+                    const x = cx + Math.cos(angle) * rx - 3;
+                    const y = cy + Math.sin(angle) * ry - 3;
+                    el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+                    requestAnimationFrame(animate);
+                }
+                requestAnimationFrame(animate);
+            });
+        }
+
+        /* ---------- scrollspy ---------- */
+        function initScrollspy() {
+            const sections = LESSONS.concat(['applications', 'activity', 'leaderboard']);
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        document.querySelectorAll('.rail-link').forEach(l => {
+                            l.classList.toggle('active', l.dataset.target === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-40% 0px -50% 0px' });
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) observer.observe(el);
+            });
+        }
+
+        /* ---------- init ---------- */
+        document.getElementById('ryAngle').addEventListener('input', e => {
+            document.getElementById('ryAngleVal').textContent = e.target.value + '°';
+        });
+        document.getElementById('blochTheta').addEventListener('input', drawBloch);
+        document.getElementById('blochPhi').addEventListener('input', drawBloch);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initStarfield();
+            initHeroDrift();
+            initHeroParticles();
+            initScrollspy();
+            renderCircuitTrack();
+            renderState();
+            drawBloch();
+
+            const session = getSession();
+            if (session && session.email) {
+                const users = loadUsers();
+                if (users[session.email]) {
+                    currentUser = users[session.email];
+                    touchStreakAndActivity();
+                    persistCurrentUser();
+                    enterApp();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
